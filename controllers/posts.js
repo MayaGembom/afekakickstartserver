@@ -28,9 +28,10 @@ export const getPost = async (req, res) => {
 }
 
 export const createPost = async (req, res) => {
-    const { title, description, selectedFile, creator, category,goal,deadLine } = req.body;
 
-    const newPostMessage = new ProjectData({ title, description, selectedFile, creator, category ,goal , deadLine})
+    const post = req.body;
+
+    const newPostMessage = new ProjectData({ ...post, creator: req.userId, createdAt: new Date().toISOString()})
 
     try {
         await newPostMessage.save();
