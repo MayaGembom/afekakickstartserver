@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 const projectSchema = mongoose.Schema({
     title: String,
     description: String,
+    link: String,
+    vdlink: String,
     name: String,
     creator: String,
     category: String,
