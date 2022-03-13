@@ -42,7 +42,7 @@ export const deletePost = async (req, res) => {
 export default router;
 
 export const pladgeProject = async (req, res) => {
-    const { id } = req.params;
+    const { id, pledge } = req.params;
 
     if (!req.userId) {
         return res.json({ message: "Unauthenticated" });
@@ -51,11 +51,8 @@ export const pladgeProject = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
     
     const post = await ProjectData.findById(id);
-
-  
-    const updatedPost = await ProjectData.findByIdAndUpdate(id, { pledgeCount: post.pledgeCount + 1}, { new: true });
+    const updatedPost = await ProjectData.findByIdAndUpdate(id, { pledgeCount: post.pledgeCount + pledge}, { new: true });
     res.status(200).json(updatedPost);
-
 
 }
 
