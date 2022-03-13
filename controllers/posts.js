@@ -15,22 +15,9 @@ export const getPosts = async (req, res) => {
     }
 }
 
-export const getPost = async (req, res) => { 
-    const { id } = req.params;
-
-    try {
-        const post = await ProjectData.findById(id);
-        
-        res.status(200).json(post);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
-}
 
 export const createPost = async (req, res) => {
-
     const post = req.body;
-
     const newPostMessage = new ProjectData({ ...post, creator: req.userId, createdAt: new Date().toISOString()})
 
     try {
@@ -53,3 +40,22 @@ export const deletePost = async (req, res) => {
 }
 
 export default router;
+
+export const pladgeProject = async (req, res) => {
+    const { id } = req.params;
+
+    if (!req.userId) {
+        return res.json({ message: "Unauthenticated" });
+      }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
+    
+    const post = await ProjectData.findById(id);
+
+  
+    const updatedPost = await ProjectData.findByIdAndUpdate(id, { pledgeCount: post.pledgeCount + 1}, { new: true });
+    res.status(200).json(updatedPost);
+
+
+}
+
